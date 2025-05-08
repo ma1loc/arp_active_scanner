@@ -17,26 +17,26 @@
 
 
 
-import scapy.all as scapy
-import sys
-import os
+# import scapy.all as scapy
+# import sys
+# import os
 
-def scan(ip_range):
-    broadcast_mac = "ff:ff:ff:ff:ff:ff"
-    for i in range(1, 255):  # Scan IPs from .1 to .254
-        ip = f"{ip_range}.{i}"
-        arp_request = scapy.ARP(pdst=ip)
-        ether_request = scapy.Ether(dst=broadcast_mac)
-        packet = ether_request / arp_request
+# def scan(ip_range):
+#     broadcast_mac = "ff:ff:ff:ff:ff:ff"
+#     for i in range(1, 255):  # Scan IPs from .1 to .254
+#         ip = f"{ip_range}.{i}"
+#         arp_request = scapy.ARP(pdst=ip)
+#         ether_request = scapy.Ether(dst=broadcast_mac)
+#         packet = ether_request / arp_request
 
-        answered = scapy.srp(packet, timeout=1, verbose=0)[0]
-        for sent, received in answered:
-            print(f"{received.psrc} is up, MAC: {received.hwsrc}", flush=True)
+#         answered = scapy.srp(packet, timeout=1, verbose=0)[0]
+#         for sent, received in answered:
+#             print(f"{received.psrc} is up, MAC: {received.hwsrc}", flush=True)
 
-def main():
-    if os.geteuid() != 0:
-        sys.exit("Run as root: sudo python3 setup.py")
-    scan("10.32.1")
+# def main():
+#     if os.geteuid() != 0:
+#         sys.exit("Run as root: sudo python3 setup.py")
+#     scan("10.32.1")
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
