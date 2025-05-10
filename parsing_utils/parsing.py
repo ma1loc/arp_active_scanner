@@ -6,3 +6,4 @@ def	check_is_root():
 		print("Your must be a root.")
 		exit(1)
 
+# check if the interface if there
