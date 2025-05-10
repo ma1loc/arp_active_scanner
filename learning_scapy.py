@@ -40,3 +40,69 @@
 
 # if __name__ == "__main__":
 #     main()
+
+# // what is it for?
+#  for nic in interfaces:
+#         if nic == "lo":
+#             continue
+
+# import netifaces
+# import scapy.all as scapy
+
+# def is_nic_up(interface):
+#     try:
+#         with open(f"/sys/class/net/{interface}/operstate") as f:
+#             return f.read().strip() == "up"
+#     except FileNotFoundError:
+#         return False
+
+# def s_print(msg, newline=True):
+#     GREEN = "\033[92m"
+#     RESET = "\033[0m"
+#     if newline:
+#         print(f"{GREEN}{msg}{RESET}")
+#     else:
+#         print(f"{GREEN}{msg}{RESET}", end="")
+
+# def get_active_nic():
+#     interfaces = netifaces.interfaces()
+#     for nic in interfaces:
+#         if nic == "lo" or not is_nic_up(nic):
+#             continue
+#         try:
+#             ipv4_info = netifaces.ifaddresses(nic)[netifaces.AF_INET][0]
+#             ip = ipv4_info['addr']
+#             netmask = ipv4_info['netmask']
+#             s_print("Active ", newline=False)
+#             print(f"Interface: {nic}, IP: {ip}, Netmask: {netmask}")
+#         except (KeyError, IndexError):
+#             print(f"Interface: {nic} does not have an IPv4 address")
+
+# def arp_scan(ip):
+#     broadcast_mac = "ff:ff:ff:ff:ff:ff"
+#     broadcast_ether = scapy.Ether(dst=broadcast_mac)
+#     arp_request = scapy.ARP(pdst=ip)
+#     packet = broadcast_ether / arp_request
+#     answered, _ = scapy.srp(packet, timeout=1, verbose=False)
+
+#     print("IP Address\t\tMAC Address\n" + "-" * 40)
+#     for _, received_packet in answered:
+#         print(f"{received_packet.psrc}\t\t{received_packet.hwsrc}")
+
+# def main():
+#     get_active_nic()
+#     # arp_scan("10.32.86.170/21")
+
+# if __name__ == "__main__":
+#     main()
+
+
+
+
+
+
+
+
+
+
+
