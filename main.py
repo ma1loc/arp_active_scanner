@@ -15,13 +15,22 @@
 # ║                                                                          ║
 # ╚══════════════════════════════════════════════════════════════════════════╝
 
-import	scapy.all as scapy
-import	ipaddress
-from	parsing_utils.rgb_msg import s_print
-import	time
-import	ipaddress
-import	netifaces
-import	sys
+import signal
+from parsing_utils.parsing import handle_sigint
+signal.signal(signal.SIGINT, handle_sigint)
+from parsing_utils.rgb_msg import s_print
+from parsing_utils.parsing import is_root
+from parsing_utils.parsing import clear_terminal
+import scapy.all as scapy
+import ipaddress
+import time
+import ipaddress
+import netifaces
+# from mac_vendor_lookup import MacLookup
+from mac_vendor_lookup import MacLookup # type: ignore
+
+print(MacLookup().lookup("00:80:41:12:FE"))
+import os
 
 def	is_nic_up(interface):
     try:
@@ -47,15 +56,14 @@ def get_active_nic():
             print(f"Interface: {nic} does not have an IPv4 address")
     return None
 
-
-def arp_scan(ip):
+def arp_scan(ip_range):
     broadcast_mac = "ff:ff:ff:ff:ff:ff"
     broadcast_ether = scapy.Ether(dst=broadcast_mac)
-    arp_request = scapy.ARP(pdst=ip)
+    arp_request = scapy.ARP(pdst=ip_range)
     packet = broadcast_ether / arp_request
 
-    print("IP Address\t\tMAC Address")
-    print("-" * 40)
+    print("IP Address\t\tMAC Address\t\t\tVendor")
+    print("-" * 75)
     queried_ips = set()
 
     while True:
@@ -64,19 +72,23 @@ def arp_scan(ip):
             for send_packet, received_packet in answered:
                 ip = received_packet.psrc
                 if ip not in queried_ips:
-                    print(f"{ip}\t\t{received_packet.hwsrc}")
+                    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                    # print(f"{ip}\t\t{received_packet.hwsrc}")
+                    mac = received_packet.hwsrc
+                    try:
+                        vendor = MacLookup().lookup(mac)
+                    except:
+                        vendor = "Unknown"
+                    print(f"{ip}\t\t{mac}\t\t{vendor}")
+                    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                     queried_ips.add(ip)
                 time.sleep(0.5)
-        else:
-            break
-
-import	os
-
-def clear_terminal():
-    # Clear the terminal screen
-    os.system("cls" if os.name == "nt" else "clear")
+            else:
+                s_print("\nScan complete.\n", newline=True)
+                break
 
 def main():
+    is_root()
     clear_terminal()
     network = get_active_nic()
     if network:
