@@ -15,8 +15,6 @@
 # for sent, received in result:
 #     print(f"{received.psrc} is up, MAC: {received.hwsrc}")
 
-
-
 # import scapy.all as scapy
 # import sys
 # import os
@@ -95,14 +93,5 @@
 
 # if __name__ == "__main__":
 #     main()
-
-
-
-
-
-
-
-
-
 
 
