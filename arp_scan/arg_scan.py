@@ -19,7 +19,6 @@ import ipaddress
 import random
 import time
 
-1
 def arp_scan(ip_range, stealth):
     print("IP Address\t\tMAC Address\t\t\tVendor")
     print("-" * 75)
