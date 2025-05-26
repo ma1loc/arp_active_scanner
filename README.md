@@ -88,6 +88,15 @@ IP Address         MAC Address              Vendor
 192.168.1.5        11:22:33:44:55:66        Apple, Inc.
 ```
 
+## You can use the Command to enable IP forwarding:
+```bash
+echo 1 > /proc/sys/net/ipv4/ip_forward
+```
+## To Disable it after you're done (for safety)
+```bash
+echo 0 > /proc/sys/net/ipv4/ip_forward
+```
+
 ## How It Works
 
 1. The scanner sends ARP requests to the broadcast address or individual IP addresses
